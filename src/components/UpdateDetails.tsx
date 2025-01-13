@@ -1,6 +1,6 @@
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { useContext, useRef, useState } from "react";
-import { funcContext, partUser, userContext } from "./Login";
+import { funcContext, idUser, partUser, userContext } from "./Login";
 import axios from "axios";
 
 const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault: boolean, Close: Function }) => {
@@ -20,6 +20,7 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
     const [open, setOpen] = useState(opendefault)
     const userDetails = useContext<partUser>(userContext)
     const functDetails = useContext<Function>(funcContext)
+    const userID = useContext<number>(idUser);
     const nameRef = useRef<HTMLInputElement>(null);
     const mailRef = useRef<HTMLInputElement>(null);
     const codeRef = useRef<HTMLInputElement>(null);
@@ -29,6 +30,7 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
 
     return (
         <>
+        
             <Modal open={open} >
                 <Box sx={style} >
                     <TextField label='Name' inputRef={nameRef} />
@@ -38,7 +40,8 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
                     <TextField label='Phone' inputRef={phoneRef} />
 
                     <Button onClick={
-                        async (e: any) => {
+                        async (e: any) => {                      
+
                             e.preventDefault();
                             setOpen(false);
                             if (nameRef.current?.value != userDetails.firstName) {
@@ -53,21 +56,23 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
 
                                     }
                                     const logUser = {
+                                        firstName: nameRef.current?.value,
+                                        lastName: nameRef.current?.value,
                                         email: mailRef.current?.value,
-                                        password: codeRef.current?.value,
+                                        address: addressRef.current?.value,
+                                        phone: Number(phoneRef.current?.value)
 
                                     }
-                                    await axios.post(url + '/login', logUser);
+                          
+                                    await axios.put(url, logUser, { headers: { 'user-id': userID + '' } });
 
                                     functDetails({
                                         type: 'SET_USER', data: user
                                     });
-
-
                                 }
                                 catch (e: any) {
-                                    if (e.response?.status === 401) {
-                                        alert('Invalid credentials')
+                                    if (e.response?.status === 404) {
+                                        alert('User not found')
                                     }
                                 }
                             }

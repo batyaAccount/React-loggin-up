@@ -14,6 +14,7 @@ export type User = {
 export type partUser = Partial<User>
 export const userContext = createContext<partUser>({})
 export const funcContext = createContext<Function>(() => { })
+export const idUser = createContext<number>(0)
 const url = 'http://localhost:3000/api/user'
 
 const Login = () => {
@@ -45,7 +46,7 @@ const Login = () => {
     }
     const [isLogin, setIsLogin] = useState(false)
     const [open, setOpen] = useState(false)
-
+    const [userId, setUserId] = useState<number>(0);
     const [user, userDispatch] = useReducer(userReducer, {} as User);
     const LastNameRef = useRef<HTMLInputElement>(null);
     const firstNameRef = useRef<HTMLInputElement>(null);
@@ -63,66 +64,60 @@ const Login = () => {
 
             <userContext.Provider value={user}>
                 <funcContext.Provider value={userDispatch}>
-                    <Grid2 container >
-                        <Grid2 size={2}>
-                            <div style={{display: "flex", alignItems: "center" }} >
-                            {(!isLogin) ?
-                                <Button color="primary" variant="contained" onClick={handleClick}>Login</Button> :
-                                <Userdetails></Userdetails>}</div>
+                    <idUser.Provider value={userId}>
+                        <Grid2 container >
+                            <Grid2 size={2}>
+                                <div style={{ display: "flex", alignItems: "center" }} >
+                                    {(!isLogin) ?
+                                        <Button color="primary" variant="contained" onClick={handleClick}>Login</Button> :
+                                        <Userdetails></Userdetails>}</div>
+                            </Grid2>
                         </Grid2>
-                    </Grid2>
 
-                    <Modal open={open} onClose={() => setOpen(false)}>
-                        <Box sx={style} >
-                            <TextField label='firstName' inputRef={firstNameRef} />
-                            <TextField label='LastName' inputRef={LastNameRef} />
-                            <TextField label='Mail' inputRef={mailRef} />
-                            <TextField label='Code' inputRef={codeRef} />
-                            <TextField label='Address' inputRef={addressRef} />
-                            <TextField label='Phone' inputRef={phoneRef} />
+                        <Modal open={open} onClose={() => setOpen(false)}>
+                            <Box sx={style} >
+                                <TextField label='firstName' inputRef={firstNameRef} />
+                                <TextField label='LastName' inputRef={LastNameRef} />
+                                <TextField label='Mail' inputRef={mailRef} />
+                                <TextField label='Code' inputRef={codeRef} />
+                                <TextField label='Address' inputRef={addressRef} />
+                                <TextField label='Phone' inputRef={phoneRef} />
 
-                            <Button onClick={async (e) => {
-                                e.preventDefault();
-                                setOpen(false);
-                                setIsLogin(true);
-                                try {
-                                    const user = {
-                                        firstName: firstNameRef.current?.value,
-                                        LastName: LastNameRef.current?.value,
-                                        Mail: mailRef.current?.value,
-                                        Code: codeRef.current?.value,
-                                        Address: addressRef.current?.value,
-                                        Phone: Number(phoneRef.current?.value)
+                                <Button onClick={async (e) => {
+                                    e.preventDefault();
+                                    setOpen(false);
+                                    setIsLogin(true);
+                                    try {
+                                        const user = {
+                                            firstName: firstNameRef.current?.value,
+                                            LastName: LastNameRef.current?.value,
+                                            Mail: mailRef.current?.value,
+                                            Code: codeRef.current?.value,
+                                            Address: addressRef.current?.value,
+                                            Phone: Number(phoneRef.current?.value)
 
+                                        }
+                                        const logUser = {
+                                            email: mailRef.current?.value,
+                                            password: codeRef.current?.value
+                                        }
+                                        const res = await axios.post(url + '/login', logUser)
+                                        setUserId(res.data.user.id);
+                                        userDispatch({ type: 'SET_USER', data: { ...user } });
+                                    } 
+                                    catch (e: any) {
+                                        if (e.response?.status === 401) {
+                                            alert('Invalid credentials')
+                                        }
                                     }
-                                    const logUser = {
-
-                                        email: mailRef.current?.value,
-                                        password: codeRef.current?.value,
-
-
-                                    }
-                             
-                                    await axios.post(url + '/login', logUser
-                                    )
-
-                                    userDispatch({
-                                        type: 'SET_USER', data: { ...user }
-                                    });
-                                } catch (e: any) {
-
-
-                                    if (e.response?.status === 401) {
-                                        alert('Invalid credentials')
-                                    }
-                                }
 
 
 
 
-                            }}>Login</Button>
-                        </Box>
-                    </Modal>
+                                }}>Login</Button>
+                            </Box>
+                        </Modal>
+                    </idUser.Provider>
                 </funcContext.Provider>
             </userContext.Provider>
         </>

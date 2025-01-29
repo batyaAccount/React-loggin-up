@@ -5,12 +5,18 @@ const NavBar = () => {
     return (
         <>
             <nav>
-                <Link to="./HomePage"> Home </Link>
-                <Link to="./Aboute"> Aboute </Link>
-                <NavLink to='/rer' />
+                <div style={{
+                    display: "flex", position: "absolute", alignItems: "center",
+                    top: "5%",
+                    right: "5%"
+                }}>
+               
+                    <Link to="./Recipes"> Recipes </Link>
+                    <Link to="./AddRecipeLayout" style={{margin:"5px"}}> Add recipe </Link>
+                    <NavLink to='/rer' />
 
+                </div >
             </nav>
-
         </>
     )
 }

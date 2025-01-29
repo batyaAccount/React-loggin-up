@@ -1,21 +1,25 @@
 import { createBrowserRouter } from "react-router";
-import NavBar from "./components/NavBar";
-import { Outlet } from "react-router";
 import HomePage from "./components/HomePage";
-import Aboute from "./components/Aboute";
+import Recipes from "./components/Recipes";
+import Layout from "./components/Layout";
+import { Outlet } from "react-router";
+import AddRecipeLayout from "./components/AddRecipeLayout";
+import { Provider } from "react-redux";
+import store from "./components/reduxStore";
 
 
 export const router = createBrowserRouter(
     [
         {
             path: "/", element:
-                <>
-                    <NavBar></NavBar>
-                    <Outlet></Outlet>
-                </>,
+                <Layout />,
             children: [
-                { path: "/HomePage", element: <HomePage /> },
-                { path: "/Aboute", element: <Aboute /> },
+                { path: "/HomePage", element: <><HomePage /><Outlet /> </> },
+                { path: "/Recipes", element: <><Recipes /><Outlet /> </> },
+                {
+                    path: '/AddRecipeLayout', element: 
+                        <AddRecipeLayout />
+                },
             ]
         },
 

@@ -1,7 +1,10 @@
 import { Box, Button, Grid2, Modal, TextField } from "@mui/material"
-import { createContext, useReducer, useRef, useState } from "react"
+import { Component, createContext, useContext, useReducer, useRef, useState } from "react"
 import Userdetails from "./Userdetails";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setStateUserId } from "./userIdSlice";
+
 export type User = {
     firstName: string | undefined,
     LastName: string,
@@ -9,17 +12,14 @@ export type User = {
     Code: string,
     Address: string,
     Phone: number,
-
 }
 export type partUser = Partial<User>
 export const userContext = createContext<partUser>({})
 export const funcContext = createContext<Function>(() => { })
-export const idUser = createContext<number>(0)
+export const userIdContext = createContext<number>(0);
+
 const url = 'http://localhost:3000/api/user'
-
 const Login = () => {
-
-
     const style = {
         position: 'absolute',
         top: '50%',
@@ -31,7 +31,6 @@ const Login = () => {
         boxShadow: 24,
         p: 4,
     };
-
     type action = {
         type: string,
         data: partUser
@@ -44,6 +43,7 @@ const Login = () => {
                 return state
         }
     }
+    const [state, setState] = useState("");
     const [isLogin, setIsLogin] = useState(false)
     const [open, setOpen] = useState(false)
     const [userId, setUserId] = useState<number>(0);
@@ -54,26 +54,24 @@ const Login = () => {
     const codeRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
     const phoneRef = useRef<HTMLInputElement>(null);
-    const handleClick = (e: any) => {
-        e.preventDefault()
-        setOpen(!open);
-
-    }
+    const dispatch = useDispatch();
     return (
         <>
-
             <userContext.Provider value={user}>
                 <funcContext.Provider value={userDispatch}>
-                    <idUser.Provider value={userId}>
-                        <Grid2 container >
+                    <userIdContext.Provider value={userId}>
+                        <Grid2 container spacing={2}>
                             <Grid2 size={2}>
                                 <div style={{ display: "flex", alignItems: "center" }} >
                                     {(!isLogin) ?
-                                        <Button color="primary" variant="contained" onClick={handleClick}>Login</Button> :
+                                        <>
+                                            <div style={{ display: 'flex' }}>
+                                                <Button color="primary" variant="contained" onClick={() => { setState("login"); setOpen(!open) }}>Login</Button>
+                                                <Button color="primary" variant="contained" onClick={() => { setState("register"); setOpen(!open) }}>Register</Button>
+                                            </div></> :
                                         <Userdetails></Userdetails>}</div>
                             </Grid2>
                         </Grid2>
-
                         <Modal open={open} onClose={() => setOpen(false)}>
                             <Box sx={style} >
                                 <TextField label='firstName' inputRef={firstNameRef} />
@@ -82,12 +80,10 @@ const Login = () => {
                                 <TextField label='Code' inputRef={codeRef} />
                                 <TextField label='Address' inputRef={addressRef} />
                                 <TextField label='Phone' inputRef={phoneRef} />
-
                                 <Button onClick={async (e) => {
-                                    e.preventDefault();
-                                    setOpen(false);
-                                    setIsLogin(true);
                                     try {
+                                        e.preventDefault();
+                                        setOpen(false);
                                         const user = {
                                             firstName: firstNameRef.current?.value,
                                             LastName: LastNameRef.current?.value,
@@ -95,34 +91,34 @@ const Login = () => {
                                             Code: codeRef.current?.value,
                                             Address: addressRef.current?.value,
                                             Phone: Number(phoneRef.current?.value)
-
                                         }
                                         const logUser = {
                                             email: mailRef.current?.value,
                                             password: codeRef.current?.value
                                         }
-                                        const res = await axios.post(url + '/login', logUser)
+                                        const res = await axios.post(url + '/' + state, logUser)
                                         setUserId(res.data.user.id);
+                                        dispatch(setStateUserId(res.data.user.id));
                                         userDispatch({ type: 'SET_USER', data: { ...user } });
-                                    } 
+                                        if (state === 'login')
+                                            setIsLogin(true);
+                                    }
                                     catch (e: any) {
+                                        setIsLogin(false);
                                         if (e.response?.status === 401) {
                                             alert('Invalid credentials')
                                         }
+                                        if (e.response?.status === 400) {
+                                            alert('User already exists')
+                                        }
                                     }
-
-
-
-
-                                }}>Login</Button>
+                                }}>{state}</Button>
                             </Box>
                         </Modal>
-                    </idUser.Provider>
+                    </userIdContext.Provider>
                 </funcContext.Provider>
             </userContext.Provider>
         </>
     )
 }
-
-
 export default Login

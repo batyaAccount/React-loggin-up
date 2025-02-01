@@ -1,11 +1,11 @@
 import { Avatar, Button } from "@mui/material";
-import { partUser, userContext } from './Login';
 import { deepOrange } from '@mui/material/colors';
-import { useContext, useState } from "react";
+import  { useContext, useState } from "react";
 import UpdateDetails from "./UpdateDetails";
+import { UserContext } from "./Manager";
 const Userdetails = () => {
     const [show, setShow] = useState(false)
-    const userDetails = useContext<partUser>(userContext)
+    const [userDetails,dispatch] = useContext(UserContext)
     return (
         <>
             <div style={{

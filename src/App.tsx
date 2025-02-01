@@ -1,20 +1,27 @@
+import { Box } from '@mui/material'
 import './App.css'
-import { RouterProvider } from 'react-router'
-import { router } from './router'
 import Manager from './components/Manager'
-import { Provider } from 'react-redux'
-import store from './components/reduxStore'
-
+import ba from "./images/9.jpg"
 function App() {
-
-
   return (
-    <>
-
-      <Provider store={store}>
-        <Manager></Manager>
-        <RouterProvider router={router}></RouterProvider>
-      </Provider>
+    
+    <> 
+  <Box
+     sx={{
+           position: 'fixed', 
+           top: 0, 
+           left: 0,
+           width: '100vw', 
+           height: '100vh', 
+           backgroundImage: `url(${ba})`, 
+           backgroundSize: 'cover', 
+           backgroundPosition: 'center', 
+           backgroundRepeat: 'no-repeat',
+           zIndex: 0, 
+       }}
+     >
+      <Manager></Manager>
+    </Box>
     </>
   )
 }

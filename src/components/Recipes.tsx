@@ -6,6 +6,7 @@ const Recipes :React.FC= () => {
     return (
         <>
             <h1>My recipes:</h1>
+            
             <RecipesStore/>
             
         </>

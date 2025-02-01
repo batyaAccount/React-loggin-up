@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "./reduxStore";
 import { createContext, useEffect, useState } from "react";
-import { fetchRecipes, addRecipe } from "./fetchRecipes";
+import { fetchRecipes } from "./fetchRecipes";
 import { Recipe } from "../Recipe";
 import { Button, Grid2 } from "@mui/material";
 import GroupOrientation from "./GroupOrientation";
-import ShowRecipe from "./ShowRecipe";
+import { Navigate, Outlet } from "react-router";
 
 export const buttonContext = createContext<JSX.Element[]>([]);
 export default () => {
@@ -22,20 +22,19 @@ export default () => {
         dispatch(fetchRecipes());
     }, [dispatch]);
 
- 
+
     return (<>
         <buttonContext.Provider value={buttons}>
-            <Grid2 container spacing={2}>
-                <Grid2 size={6}>
-                    {numberRecipe && <ShowRecipe recipe={numberRecipe} />}
+            {numberRecipe && <Navigate to={`./ShowRecipe/${numberRecipe.id}`} />}
+            <Grid2 container spacing={2} justifyContent="center" alignItems="center" display={"flex"} style={{ height: "100vh" }}>
+                <Grid2 size={6} style={{ height: "500px"}}>
+                    <Outlet />
                 </Grid2>
-                <Grid2 size={6} container
-                    justifyContent="center"
-                    alignItems="center">
-                    <GroupOrientation/>
+                <Grid2 size={6} style={{ height: "500px"}}>
+                    <GroupOrientation />
                 </Grid2>
-
             </Grid2>
+
         </buttonContext.Provider>
     </>)
 }

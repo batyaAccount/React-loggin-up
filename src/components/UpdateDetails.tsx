@@ -1,7 +1,8 @@
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { useContext, useRef, useState } from "react";
-import { funcContext, partUser, userContext, userIdContext } from "./Login";
+import { funcContext, partUser } from "./Login";
 import axios from "axios";
+import { UserContext } from "./Manager";
 const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault: boolean, Close: Function }) => {
     const style = {
         position: 'absolute',
@@ -14,11 +15,9 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
         boxShadow: 24,
         p: 4,
     };
-    const userId = useContext<number>(userIdContext);
 
     const [open, setOpen] = useState(opendefault)
-    const userDetails = useContext<partUser>(userContext)
-    const functDetails = useContext<Function>(funcContext)
+    const [userDetails,dispatch] = useContext(UserContext)
     const nameRef = useRef<HTMLInputElement>(null);
     const mailRef = useRef<HTMLInputElement>(null);
     const codeRef = useRef<HTMLInputElement>(null);
@@ -41,6 +40,7 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
                             if (nameRef.current?.value != userDetails.firstName) {
                                 try {
                                     const user = {
+                                        id:userDetails.id,
                                         firstName: nameRef.current?.value,
                                         lastName: nameRef.current?.value,
                                         Mail: mailRef.current?.value,
@@ -55,8 +55,8 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
                                         address: addressRef.current?.value,
                                         phone: Number(phoneRef.current?.value)
                                     }
-                                    await axios.put(url, logUser, { headers: { 'user-id': userId + '' } });
-                                    functDetails({
+                                    await axios.put(url, logUser, { headers: { 'user-id': user.id + '' } });
+                                    dispatch({
                                         type: 'SET_USER', data: user
                                     });
                                 }

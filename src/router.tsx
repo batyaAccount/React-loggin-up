@@ -4,8 +4,8 @@ import Recipes from "./components/Recipes";
 import Layout from "./components/Layout";
 import { Outlet } from "react-router";
 import AddRecipeLayout from "./components/AddRecipeLayout";
-import { Provider } from "react-redux";
-import store from "./components/reduxStore";
+import ShowRecipe from "./components/ShowRecipe";
+
 
 
 export const router = createBrowserRouter(
@@ -15,13 +15,13 @@ export const router = createBrowserRouter(
                 <Layout />,
             children: [
                 { path: "/HomePage", element: <><HomePage /><Outlet /> </> },
-                { path: "/Recipes", element: <><Recipes /><Outlet /> </> },
-                {
-                    path: '/AddRecipeLayout', element: 
-                        <AddRecipeLayout />
+                { path: "/Recipes", element: <><Recipes /> </>,
+                    children: [{path: "/Recipes/ShowRecipe/:id",element: <><ShowRecipe></ShowRecipe><Outlet></Outlet></>}]
                 },
+                { path: '/AddRecipeLayout', element: <> <AddRecipeLayout /><Outlet /></> },
             ]
         },
 
     ]
+
 )

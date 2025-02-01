@@ -1,18 +1,19 @@
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store, { AppDispatch } from "./reduxStore";
 import { addRecipe } from "./fetchRecipes";
 import AddRecipeForm from "./AddRecipeForm";
+import { useContext } from "react";
+import { UserContext } from "./Manager";
 export default () => {
-    const id = useSelector((state: any) => state.userId.userId);
 
     const dispatch = useDispatch<AppDispatch>();
+    const [user, userDispatch] = useContext(UserContext);
 
     const recipeAdd = (r: FormData) => {
-        if(id===-1)
+        if (user.id === undefined)
             alert("You must be logged in to add a recipe");
         else
-            dispatch(addRecipe({ recipe: r, userId: id }));
-       
+            dispatch(addRecipe({ recipe: r, userId: user.id }));
     }
     return (
         <>

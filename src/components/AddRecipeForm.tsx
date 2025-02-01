@@ -56,9 +56,14 @@ const addRecipeForm = ({ addToList }: { addToList: Function }) => {
             <Box
                 onSubmit={handleSubmit(onSubmit)}
                 component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-                autoComplete="off"
-            >
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100vh', // Full height to center vertically
+                    '& > :not(style)': { m: 1, width: '25ch' }
+                }}                autoComplete="off" >
                 <TextField {...register('title')} label="title" variant="filled" />
                 {errors.title && <p>{errors.title.message}</p>}
                 <br />

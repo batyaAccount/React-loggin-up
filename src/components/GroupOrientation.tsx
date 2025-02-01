@@ -16,6 +16,7 @@ export default function GroupOrientation() {
                 orientation="vertical"
                 aria-label="Vertical button group"
                 variant="text"
+          
             >
                 {buttons}
             </ButtonGroup>

@@ -1,13 +1,34 @@
-import Login from "./Login"
+import { Outlet, RouterProvider } from "react-router"
+import  { partUser, User } from "./Login"
+import { router } from "../router"
+import { Provider } from "react-redux"
+import store from "./reduxStore"
+import {   createContext, useReducer } from "react"
+type action = {
+    type: string,
+    data: partUser
+}
+type UserContextType = [partUser,React.Dispatch<action>];
+
+export const UserContext = createContext<UserContextType>([{}, () => {}]);
 export default () => {
+
+    const userReducer = (state: partUser, action: action):partUser => {
+        switch (action.type) {
+            case 'SET_USER': { }
+                return { ...action.data }
+            default:
+                return state
+        }
+    }
+    const [user, userDispatch] = useReducer(userReducer, {} as User);
+
     return (<>
-        <div style={{
-            display: "flex", position: "absolute", alignItems: "center",
-            top: "5%",
-            left: "5%"
-        }}>
-            <Login>
-            </Login>
-        </div>
+        <UserContext.Provider value={[user, userDispatch]}>
+            <Provider store={store} >
+                <RouterProvider router={router}></RouterProvider>
+            </Provider>
+        </UserContext.Provider>
     </>)
 }
+

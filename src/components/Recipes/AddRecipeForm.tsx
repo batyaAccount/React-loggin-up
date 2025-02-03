@@ -24,21 +24,15 @@ const addRecipeForm = ({ addToList }: { addToList: Function }) => {
         handleSubmit,
         reset,
     } = useForm({ resolver: yupResolver(validationSchema) })
-
     const [ingredients, setIngredients] = useState<string[]>(['']);
-
-
-
     const handleIngredientChange = (index: number, value: string) => {
         const newIngredients = [...ingredients];
         newIngredients[index] = value;
         setIngredients(newIngredients);
     };
-
     const addIngredientField = () => {
         setIngredients([...ingredients, '']);
     };
-
     const removeIngredientField = (index: number) => {
         const newIngredients = ingredients.filter((_, i) => i !== index);
         setIngredients(newIngredients);
@@ -61,7 +55,7 @@ const addRecipeForm = ({ addToList }: { addToList: Function }) => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: '100vh', // Full height to center vertically
+                    height: '100vh', 
                     '& > :not(style)': { m: 1, width: '25ch' }
                 }}                autoComplete="off" >
                 <TextField {...register('title')} label="title" variant="filled" />
@@ -88,9 +82,6 @@ const addRecipeForm = ({ addToList }: { addToList: Function }) => {
                 <br />
                 <button type="submit" > submit </button>
             </Box>
-
-
-
         </>);
 }
 export default addRecipeForm

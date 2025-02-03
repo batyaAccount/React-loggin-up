@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router"
 import NavBar from "./NavBar"
-import Login from "./Login"
+import Login from "./Login/Login"
 
 
 export default () => {
@@ -15,7 +15,6 @@ export default () => {
                 <Login>
                 </Login>
             </div>
-            <Navigate to="HomePage" replace />
             <Outlet></Outlet>
         </>
     )

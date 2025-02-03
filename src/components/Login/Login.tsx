@@ -1,22 +1,19 @@
 import { Box, Button, Grid2, Modal, TextField } from "@mui/material"
-import {  createContext, useContext,  useRef, useState } from "react"
-import Userdetails from "./Userdetails";
+import { createContext, useContext, useRef, useState } from "react"
 import axios from "axios";
-import { UserContext } from "./Manager";
-
+import { UserContext } from "../Manager";
+import Userdetails from "./Userdetails";
+import { Navigate } from "react-router";
 export type User = {
-    id:number,
+    id: number | undefined,
     firstName: string | undefined,
-    LastName: string,
-    Mail: string,
-    Code: string,
-    Address: string,
-    Phone: number,
+    LastName: string | undefined,
+    Mail: string | undefined,
+    Code: string | undefined,
+    Address: string | undefined,
+    Phone: number | undefined,
 }
 export type partUser = Partial<User>
-export const funcContext = createContext<Function>(() => { })
-export const userIdContext = createContext<number>(0);
-
 const url = 'http://localhost:3000/api/user'
 const Login = () => {
     const style = {
@@ -30,7 +27,6 @@ const Login = () => {
         boxShadow: 24,
         p: 4,
     };
-
     const [state, setState] = useState("");
     const [isLogin, setIsLogin] = useState(false)
     const [open, setOpen] = useState(false)
@@ -43,7 +39,7 @@ const Login = () => {
     const phoneRef = useRef<HTMLInputElement>(null);
     return (
         <>
-
+            <Navigate to="HomePage" replace />
             <Grid2 container spacing={2}>
                 <Grid2 size={2}>
                     <div style={{ display: "flex", alignItems: "center" }} >
@@ -68,8 +64,8 @@ const Login = () => {
                         try {
                             e.preventDefault();
                             setOpen(false);
-                            const user = {
-                                id:undefined,
+                            const user: User = {
+                                id: undefined,
                                 firstName: firstNameRef.current?.value,
                                 LastName: LastNameRef.current?.value,
                                 Mail: mailRef.current?.value,
@@ -77,11 +73,7 @@ const Login = () => {
                                 Address: addressRef.current?.value,
                                 Phone: Number(phoneRef.current?.value)
                             }
-                            const logUser = {
-                                email: mailRef.current?.value,
-                                password: codeRef.current?.value
-                            }
-                            const res = await axios.post(url + '/' + state, logUser)
+                            const res = await axios.post(url + '/' + state, { email: user.Mail, password: user.Code })
                             user.id = res.data.user.id;
                             userDispatch({ type: 'SET_USER', data: { ...user } });
                             if (state === 'login')

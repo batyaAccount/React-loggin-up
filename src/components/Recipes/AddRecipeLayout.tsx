@@ -1,9 +1,9 @@
-import { Provider, useDispatch } from "react-redux";
-import store, { AppDispatch } from "./reduxStore";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "./reduxStore";
 import { addRecipe } from "./fetchRecipes";
 import AddRecipeForm from "./AddRecipeForm";
 import { useContext } from "react";
-import { UserContext } from "./Manager";
+import { UserContext } from "../Manager";
 export default () => {
 
     const dispatch = useDispatch<AppDispatch>();
@@ -17,9 +17,7 @@ export default () => {
     }
     return (
         <>
-            <Provider store={store}>
-                <AddRecipeForm addToList={recipeAdd}></AddRecipeForm>
-            </Provider>
+            <AddRecipeForm addToList={recipeAdd}></AddRecipeForm>
         </>
     )
 }

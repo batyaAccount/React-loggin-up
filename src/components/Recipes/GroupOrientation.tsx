@@ -1,8 +1,8 @@
 import { Box, ButtonGroup } from "@mui/material";
-import { useContext } from "react";
+import { ReactElement, useContext } from "react";
 import { buttonContext } from "./RecipesStore";
 export default function GroupOrientation() {
-    const buttons = useContext<JSX.Element[]>(buttonContext);
+    const buttons = useContext<ReactElement[]>(buttonContext);
     return (
         <Box
             sx={{
@@ -16,7 +16,6 @@ export default function GroupOrientation() {
                 orientation="vertical"
                 aria-label="Vertical button group"
                 variant="text"
-          
             >
                 {buttons}
             </ButtonGroup>

@@ -1,10 +1,7 @@
-import { Button, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 
 const HomePage = () => {
-
-
-
 
     return (
         <Container 

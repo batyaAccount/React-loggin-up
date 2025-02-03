@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Recipe } from "../Recipe";
+import { Recipe } from "../../Recipe";
 
 export const fetchRecipes = createAsyncThunk('recipes/fetch', async (_, thunkAPI) => {
     try {
@@ -69,7 +69,4 @@ export const recipesSlice = createSlice({
             })
             }
 });
-
-
-
 

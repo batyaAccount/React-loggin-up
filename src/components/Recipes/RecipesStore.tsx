@@ -1,18 +1,18 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "./reduxStore";
-import { createContext, useEffect, useState } from "react";
+import { createContext, ReactElement, useEffect, useState } from "react";
 import { fetchRecipes } from "./fetchRecipes";
-import { Recipe } from "../Recipe";
+import { Recipe } from "../../Recipe";
 import { Button, Grid2 } from "@mui/material";
 import GroupOrientation from "./GroupOrientation";
 import { Navigate, Outlet } from "react-router";
 
-export const buttonContext = createContext<JSX.Element[]>([]);
+export const buttonContext = createContext<ReactElement[]>([]);
 export default () => {
     const [numberRecipe, setNumberRecipe] = useState<Recipe | undefined>(undefined);
     const dispatch = useDispatch<AppDispatch>();
     const recipes = useSelector((state: RootState) => state.recipes.recipes);
-    const buttons: JSX.Element[] = recipes.map((r: Recipe) => (
+    const buttons: ReactElement[] = recipes.map((r: Recipe) => (
         <Button onClick={() => handleClick(r)} key={r.id}>{r.title}</Button>
     ));
     const handleClick = (recipe: Recipe) => {

@@ -8,7 +8,7 @@ function App() {
     <> 
   <Box
      sx={{
-           position: 'fixed', 
+           position: 'absolute', 
            top: 0, 
            left: 0,
            width: '100vw', 
@@ -16,8 +16,10 @@ function App() {
            backgroundImage: `url(${ba})`, 
            backgroundSize: 'cover', 
            backgroundPosition: 'center', 
-           backgroundRepeat: 'no-repeat',
+           backgroundRepeat: 'repeat-y',
            zIndex: 0, 
+           minHeight: '100vh',
+           overflowY: 'auto' 
        }}
      >
       <Manager></Manager>
@@ -27,3 +29,6 @@ function App() {
 }
 
 export default App
+
+
+

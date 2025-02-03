@@ -1,9 +1,9 @@
 import { Outlet, RouterProvider } from "react-router"
-import  { partUser, User } from "./Login"
 import { router } from "../router"
 import { Provider } from "react-redux"
-import store from "./reduxStore"
+import store from "./Recipes/reduxStore"
 import {   createContext, useReducer } from "react"
+import { partUser, User } from "./Login/Login"
 type action = {
     type: string,
     data: partUser
@@ -24,11 +24,11 @@ export default () => {
     const [user, userDispatch] = useReducer(userReducer, {} as User);
 
     return (<>
-        <UserContext.Provider value={[user, userDispatch]}>
+        <UserContext value={[user, userDispatch]}>
             <Provider store={store} >
                 <RouterProvider router={router}></RouterProvider>
             </Provider>
-        </UserContext.Provider>
+        </UserContext>
     </>)
 }
 

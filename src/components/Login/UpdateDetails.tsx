@@ -1,8 +1,7 @@
 import { Box, Button, Modal, TextField } from "@mui/material";
-import { useContext, useRef, useState } from "react";
-import { funcContext, partUser } from "./Login";
+import { FormEvent, useContext, useRef, useState } from "react";
 import axios from "axios";
-import { UserContext } from "./Manager";
+import { UserContext } from "../Manager";
 const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault: boolean, Close: Function }) => {
     const style = {
         position: 'absolute',
@@ -17,7 +16,7 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
     };
 
     const [open, setOpen] = useState(opendefault)
-    const [userDetails,dispatch] = useContext(UserContext)
+    const [userDetails, dispatch] = useContext(UserContext)
     const nameRef = useRef<HTMLInputElement>(null);
     const mailRef = useRef<HTMLInputElement>(null);
     const codeRef = useRef<HTMLInputElement>(null);
@@ -34,13 +33,13 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
                     <TextField label='Address' inputRef={addressRef} />
                     <TextField label='Phone' inputRef={phoneRef} />
                     <Button onClick={
-                        async (e: any) => {                      
+                        async (e: FormEvent) => {
                             e.preventDefault();
                             setOpen(false);
                             if (nameRef.current?.value != userDetails.firstName) {
                                 try {
                                     const user = {
-                                        id:userDetails.id,
+                                        id: userDetails.id,
                                         firstName: nameRef.current?.value,
                                         lastName: nameRef.current?.value,
                                         Mail: mailRef.current?.value,
@@ -48,14 +47,8 @@ const Updatedetails = ({ text, opendefault, Close }: { text: string, opendefault
                                         Address: addressRef.current?.value,
                                         Phone: Number(phoneRef.current?.value)
                                     }
-                                    const logUser = {
-                                        firstName: nameRef.current?.value,
-                                        lastName: nameRef.current?.value,
-                                        email: mailRef.current?.value,
-                                        address: addressRef.current?.value,
-                                        phone: Number(phoneRef.current?.value)
-                                    }
-                                    await axios.put(url, logUser, { headers: { 'user-id': user.id + '' } });
+                                    await axios.put(url, { firstName: user.firstName, lastName: user.lastName, email: user.Mail,
+                                         address: user.Address, phone: user.Phone }, { headers: { 'user-id': user.id + '' } });
                                     dispatch({
                                         type: 'SET_USER', data: user
                                     });

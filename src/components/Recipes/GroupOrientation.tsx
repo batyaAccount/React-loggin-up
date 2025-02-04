@@ -1,8 +1,8 @@
 import { Box, ButtonGroup } from "@mui/material";
 import { ReactElement, useContext } from "react";
-import { buttonContext } from "./RecipesStore";
+import { ButtonContext } from "./RecipesStore";
 export default function GroupOrientation() {
-    const buttons = useContext<ReactElement[]>(buttonContext);
+    const buttons = useContext<ReactElement[]>(ButtonContext);
     return (
         <Box
             sx={{

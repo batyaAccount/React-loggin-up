@@ -7,7 +7,7 @@ import { Button, Grid2 } from "@mui/material";
 import GroupOrientation from "./GroupOrientation";
 import { Navigate, Outlet } from "react-router";
 
-export const buttonContext = createContext<ReactElement[]>([]);
+export const ButtonContext = createContext<ReactElement[]>([]);
 export default () => {
     const [numberRecipe, setNumberRecipe] = useState<Recipe | undefined>(undefined);
     const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +24,7 @@ export default () => {
 
 
     return (<>
-        <buttonContext.Provider value={buttons}>
+        <ButtonContext value={buttons}>
             {numberRecipe && <Navigate to={`./ShowRecipe/${numberRecipe.id}`} />}
             <Grid2 container spacing={2} justifyContent="center" alignItems="center" display={"flex"} style={{ height: "100vh" }}>
                 <Grid2 size={6} style={{ height: "500px"}}>
@@ -35,6 +35,6 @@ export default () => {
                 </Grid2>
             </Grid2>
 
-        </buttonContext.Provider>
+        </ButtonContext>
     </>)
 }
